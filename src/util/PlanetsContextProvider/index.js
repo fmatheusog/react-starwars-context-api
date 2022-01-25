@@ -4,7 +4,7 @@ import PlanetsContext from '../../contexts/PlanetsContext';
 import getPlanets from '../../services/planetsAPI';
 
 const PlanetsContextProvider = (props) => {
-  const [planets, setPlanets] = useState({});
+  const [planets, setPlanets] = useState([]);
 
   const loadPlanets = async () => {
     const data = await getPlanets();
@@ -22,8 +22,6 @@ const PlanetsContextProvider = (props) => {
     </PlanetsContext.Provider>
   );
 };
-
-PlanetsContextProvider.contextType = PlanetsContext;
 
 PlanetsContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
