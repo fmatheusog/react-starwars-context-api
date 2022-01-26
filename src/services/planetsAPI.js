@@ -5,6 +5,6 @@ const getPlanets = async () => {
   const json = await response.json();
 
   return response.ok ? Promise.resolve(json) : Promise.reject(json);
-}
+};
 
 export default getPlanets;
