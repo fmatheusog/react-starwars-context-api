@@ -5,6 +5,9 @@ import getPlanets from '../../services/planetsAPI';
 
 const PlanetsContextProvider = (props) => {
   const [planets, setPlanets] = useState([]);
+  const [name, setName] = useState('');
+
+  const filterPlanetsByName = (string) => setName(string);
 
   const loadPlanets = async () => {
     const data = await getPlanets();
@@ -16,8 +19,14 @@ const PlanetsContextProvider = (props) => {
   }, []);
 
   const { children } = props;
+  const contextValues = {
+    data: planets,
+    filterByName: { name },
+    filterPlanetsByName,
+  };
+
   return (
-    <PlanetsContext.Provider value={ { data: planets } }>
+    <PlanetsContext.Provider value={ contextValues }>
       { children }
     </PlanetsContext.Provider>
   );
