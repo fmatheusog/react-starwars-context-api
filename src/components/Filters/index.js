@@ -11,6 +11,7 @@ const Filters = () => {
     filterByNumericValues,
     setFilterPlanetsByName,
     addNumericFilter,
+    removeFilter,
   } = useContext(PlanetsContext);
 
   const columns = [
@@ -28,11 +29,11 @@ const Filters = () => {
 
   return (
     <>
-      <h2>Filtros</h2>
+      <h2>Filters</h2>
       <div className="filters">
         <div className="name-filter">
           <label htmlFor="name-filter">
-            Filtrar por nome:
+            Filter by name:
             <input
               data-testid="name-filter"
               id="name-filter"
@@ -84,6 +85,7 @@ const Filters = () => {
                 <li key={ filter.column }>
                   { filter.column }
                   <button
+                    onClick={ () => removeFilter(filter) }
                     type="button"
                   >
                     Excluir

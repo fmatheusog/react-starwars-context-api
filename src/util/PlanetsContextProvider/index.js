@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import PlanetsContext from '../../contexts/PlanetsContext';
 import getPlanets from '../../services/planetsAPI';
@@ -16,6 +16,21 @@ const PlanetsContextProvider = (props) => {
     setPlanets(data.results);
   };
 
+  const applyFilters = useCallback(() => {
+    numericFilters.forEach((filter) => {
+      setPlanets(planets.filter((planet) => {
+        if (filter
+          .comparision === 'maior que') return planet[filter.column] > filter.value;
+        if (filter
+          .comparision === 'menor que') return planet[filter.column] < filter.value;
+        return planet[filter.column] === filter.value;
+      }));
+    });
+  }, [numericFilters, planets]);
+
+  const removeFilter = (selected) => setNumericFilters(numericFilters
+    .filter((filter) => filter.column !== selected.column));
+
   useEffect(() => {
     loadPlanets();
   }, []);
@@ -27,6 +42,7 @@ const PlanetsContextProvider = (props) => {
     filterByNumericValues: numericFilters,
     setFilterPlanetsByName,
     addNumericFilter,
+    removeFilter,
   };
 
   return (
