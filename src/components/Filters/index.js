@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PlanetsContext from '../../contexts/PlanetsContext';
 
 const Filters = () => {
@@ -28,9 +28,11 @@ const Filters = () => {
       comparision: selectedComparision,
       value: filterValue,
     });
-
-    setAppliedFilters(filterByNumericValues.map((filter) => filter.column));
   };
+
+  useEffect(() => {
+    setAppliedFilters(filterByNumericValues.map((filter) => filter.column));
+  }, [filterByNumericValues]);
 
   return (
     <>
