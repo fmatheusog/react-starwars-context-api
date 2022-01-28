@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import PlanetsContext from '../../contexts/PlanetsContext';
 
 const Filters = () => {
-  const [selectedColumn, setSelectedColumn] = useState();
-  const [selectedComparision, setSelectedComparision] = useState();
+  const [selectedColumn, setSelectedColumn] = useState('population');
+  const [selectedComparision, setSelectedComparision] = useState('maior que');
   const [filterValue, setFilterValue] = useState(0);
   const [appliedFilters, setAppliedFilters] = useState([]);
 
@@ -15,17 +15,22 @@ const Filters = () => {
   } = useContext(PlanetsContext);
 
   const columns = [
+    'population',
     'rotation_period',
     'orbital_period',
     'diameter',
     'surface_water',
-    'population',
   ].filter((column) => !appliedFilters.includes(column));
 
-  useEffect(() => {
-    const applied = filterByNumericValues.map((filter) => filter.column);
-    setAppliedFilters(applied);
-  }, [filterByNumericValues]);
+  const handleClick = () => {
+    addNumericFilter({
+      column: selectedColumn,
+      comparision: selectedComparision,
+      value: filterValue,
+    });
+
+    setAppliedFilters(filterByNumericValues.map((filter) => filter.column));
+  };
 
   return (
     <>
@@ -48,7 +53,6 @@ const Filters = () => {
             onChange={ ({ target: { value } }) => setSelectedColumn(value) }
             value={ selectedColumn }
           >
-            <option value="">Column</option>
             { columns.map((column) => (
               <option key={ column } value={ column }>{ column }</option>
             )) }
@@ -58,7 +62,6 @@ const Filters = () => {
             onChange={ ({ target: { value } }) => setSelectedComparision(value) }
             value={ selectedComparision }
           >
-            <option value="">Comparision method</option>
             <option value="maior que">maior que</option>
             <option value="menor que">menor que</option>
             <option value="igual a">igual a</option>
@@ -67,14 +70,11 @@ const Filters = () => {
             data-testid="value-filter"
             onChange={ ({ target: { value } }) => setFilterValue(value) }
             type="number"
+            value={ filterValue }
           />
           <button
             data-testid="button-filter"
-            onClick={ () => addNumericFilter({
-              column: selectedColumn,
-              comparision: selectedComparision,
-              value: filterValue,
-            }) }
+            onClick={ handleClick }
             type="button"
           >
             Filtrar
@@ -82,13 +82,16 @@ const Filters = () => {
           <div className="filters-list">
             <ul>
               { filterByNumericValues.map((filter) => (
-                <li key={ filter.column }>
+                <li
+                  data-testid="filter"
+                  key={ filter.column }
+                >
                   { filter.column }
                   <button
                     onClick={ () => removeFilter(filter) }
                     type="button"
                   >
-                    Excluir
+                    X
                   </button>
                 </li>
               )) }
